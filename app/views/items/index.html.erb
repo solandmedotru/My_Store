@@ -2,12 +2,13 @@
 
 <% if @items.empty? %>
     <b>No items in store</b>
-    <% else %>
+<% else %>
     <table>
       <tr>
         <th>item id</th>
         <th>Name</th>
         <th>Price</th>
+        <th></th>
         <th></th>
       </tr>
 
@@ -18,7 +19,8 @@
             <td><%= i.price %> руб.</td>
             <td><%= link_to 'Удалить', item_path(i),
                             method: :delete,
-                            data: { confirm: 'Подтвердите удаление' } %></td>
+                            data: {confirm: 'Подтвердите удаление'} %></td>
+            <td>Рейтинг: <%= i.votes_count %>, <%= link_to '+', upvote_item_path(i) %></td>
           </tr>
       <% end %>
     </table>

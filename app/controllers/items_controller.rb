@@ -1,11 +1,18 @@
 class ItemsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_filter :find_item, only: [:show, :edit, :update, :destroy, :upvote]
+
   def index
     @items = Item.all
   end
 
+  def expensive
+    @items = Item.where("price > 1000")
+    render "index"
+  end
+
   def show
-    unless @item = Item.where(id: params[:id]).first
+    unless @item
       render :text => 'Not Found', :status => '404'
     end
   end
@@ -15,8 +22,6 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @item = Item.find(params[:id])
-
   end
 
   def create
@@ -29,19 +34,21 @@ class ItemsController < ApplicationController
   end
 
   def update
-    @item = Item.find(params[:id])
     @item.update_attributes(item_params)
     if @item.errors.empty?
       redirect_to item_path(@item)
     else
       render "edit"
     end
-
   end
 
   def destroy
-    @item = Item.find(params[:id])
     @item.destroy
+    redirect_to action: "index"
+  end
+
+  def upvote
+    @item.increment!(:votes_count)
     redirect_to action: "index"
   end
 
@@ -49,5 +56,9 @@ class ItemsController < ApplicationController
 
   def item_params
     params.require(:item).permit(:name, :price, :weight, :real, :description)
+  end
+
+  def find_item
+    @item = Item.find(params[:id])
   end
 end
