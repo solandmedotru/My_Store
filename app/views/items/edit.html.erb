@@ -1,0 +1,9 @@
+<h1>Edit item</h1>
+<%= form_for @item do |f| %>
+    <p>Название: <br/><%= f.text_field :name %></p>
+    <p>Цена: <br/><%= f.text_field :price %></p>
+    <p>Вес: <br/><%= f.text_field :weight %></p>
+    <p>Описание: <br/><%= f.text_field :description %></p>
+    <p>Тип товара: <br/>Реальный: <%= f.radio_button(:real, 1) %> Электронный: <%= f.radio_button(:real, 0) %></p>
+    <p> <%= f.submit "Сохранить товар" %></p>
+<% end %>
