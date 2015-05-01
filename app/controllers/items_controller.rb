@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_filter :find_item, only: [:show, :edit, :update, :destroy, :upvote]
-
+  before_filter :check_if_admin, only: [:new, :edit, :update, :destroy, :create]
   def index
     @items = Item.all
   end
@@ -59,6 +59,7 @@ class ItemsController < ApplicationController
   end
 
   def find_item
-    @item = Item.find(params[:id])
+    @item = Item.where(id: params[:id]).first
+    render_404 unless @item
   end
 end
